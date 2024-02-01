@@ -5,7 +5,7 @@ let words = [
   ["Dog", "Pet", "dog.jpg"],
   ["Elephant", "Animal with a trunk", "elephant.jpg"],
   ["Flower", "Associated with plants reproducing", "flower.jpg"],
-  ["Grape", "Fruit", "grape.jpg"],
+  ["Grape", "Fruit used to make wine", "grape.jpg"],
   ["Horse", "Animal", "horse.jpg"],
   ["Igloo", "Shelter", "igloo.jpg"],
   ["Jacket", "Clothing", "jacket.jpg"],
@@ -24,7 +24,7 @@ let coincidence = null;
 let foundLetterArray = [];
 let randomWord = null;
 let successCounter = 0;
-let explanation ;
+let explanation;
 let clickableLetterArray = [];
 let alphabetArray = "abcdefghijklmnopqrstuvwxyz".split("");
 let randomIndex;
@@ -42,20 +42,27 @@ function startGame() {
   randomIndex = Math.floor(Math.random() * 20);
   foundLetterArray = [];
   let initialMessageBox = document.getElementById("initialMessageBox");
-if (initialMessageBox != null){
-  initialMessageBox.remove();
+  if (initialMessageBox != null) {
+    initialMessageBox.remove();
+  }
+  executeGameFunctionality(true);
 }
+function executeGameFunctionality(isFirstExecution) {
+  randomIndex = Math.floor(Math.random() * 20);
   explanation = words[randomIndex][1];
   randomWord = words[randomIndex][0];
-executeGameFunctionality();
-}
-
-function executeGameFunctionality(){
-  addHintToGame(true);
-  addMaskedWords();
-  addLetterButtons();
-  showLetterButtons();
-  checkIfLetterCoincides();
+  if (!isFirstExecution) {
+    foundLetterArray = [];
+    addHintToGame(true);
+    addMaskedWords(true);
+    checkIfLetterCoincides();
+  } else {
+    addLetterButtons();
+    showLetterButtons();
+    addHintToGame();
+    addMaskedWords();
+    checkIfLetterCoincides();
+  }
 }
 
 function checkCompleteWord() {
@@ -69,14 +76,16 @@ function checkCompleteWord() {
   }
 }
 
-function actUpponCoincidence() {
+function actUpponCoincidence(amountOfCoincidences) {
   if (coincidence != null) {
-    foundLetterArray.push(coincidence);
+    for (let i = 0; i < amountOfCoincidences; i++) {
+      foundLetterArray.push(coincidence);
+   }
     updateBlanksForFoundLetter();
-     let success = checkCompleteWord();
-     if (success){
- addHintToGame(false);
-     }
+    let success = checkCompleteWord();
+    if (success) {
+      executeGameFunctionality(false);
+    }
   }
 }
 
@@ -98,32 +107,24 @@ function updateBlanksForFoundLetter() {
   });
 }
 
-function addHintToGame(firstExecution) {
+function addHintToGame(update) {
   let hint;
   let points;
-  if (firstExecution){
+  if (!update) {
     hint = document.createElement("h1");
     hint.id = "hint";
-  hint.innerHTML = explanation;
-  hint.className = "gameArea";
-
-   points = document.createElement("h1");
-  points.innerHTML = successCounter;
-  points.id = "points";
-  document.body.appendChild(points);
-  document.body.appendChild(hint);
+    hint.className = "gameArea";
+    points = document.createElement("h1");
+    points.id = "points";
+    document.body.appendChild(points);
+    document.body.appendChild(hint);
   } else {
-    randomIndex =  Math.floor(Math.random() * 20);
-    explanation = words[randomIndex][1];
-    randomWord = words[randomIndex][0];
-hint = document.getElementById("hint");
-points = document.getElementById("points");
-hint.innerHTML = explanation;
-let wordArea = document.getElementById("wordArea");
-wordArea.remove();
-addMaskedWords();
+    hint = document.getElementById("hint");
+    points = document.getElementById("points")
   }
 
+  hint.innerHTML = explanation;
+  points.innerHTML = successCounter;
 }
 
 function checkIfLetterCoincides() {
@@ -134,8 +135,10 @@ function checkIfLetterCoincides() {
       let buttonLetter = clickedButton.getAttribute("data-letter");
       let wordChars = randomWord.toLowerCase().split("");
       if (wordChars.includes(buttonLetter)) {
+        wordChars.filter(x => x === buttonLetter).length;
         coincidence = buttonLetter;
-        actUpponCoincidence();
+        let amountOftimes = wordChars.filter(x => x === buttonLetter).length;
+        actUpponCoincidence(amountOftimes);
       } else {
         coincidence = null;
       }
@@ -143,13 +146,19 @@ function checkIfLetterCoincides() {
   });
 }
 
-function addMaskedWords() {
+function addMaskedWords(update) {
   let underscores = "__ ".repeat(randomWord.length);
-  let underscoresArea = document.createElement("h1");
+  let underscoresArea;
+  if (!update){
+  underscoresArea = document.createElement("h1");
   underscoresArea.id = "wordArea";
   underscoresArea.innerHTML = underscores;
   underscoresArea.className = "gameArea";
   document.body.appendChild(underscoresArea);
+} else {
+  underscoresArea = document.getElementById("wordArea");
+  underscoresArea.innerHTML = underscores;
+}
 }
 
 function addLetterButtons() {
