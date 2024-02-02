@@ -28,6 +28,8 @@ let explanation;
 let clickableLetterArray = [];
 let alphabetArray = "abcdefghijklmnopqrstuvwxyz".split("");
 let randomIndex;
+
+
 function checkName() {
   let username = document.getElementById("name").value;
 
@@ -40,54 +42,18 @@ function checkName() {
 
 function startGame() {
   randomIndex = Math.floor(Math.random() * 20);
+  randomWord[randomIndex][0];
+  explanation[randomIndex][1];
   foundLetterArray = [];
   let initialMessageBox = document.getElementById("initialMessageBox");
   if (initialMessageBox != null) {
     initialMessageBox.remove();
   }
-  executeGameFunctionality(true);
-}
-function executeGameFunctionality(isFirstExecution) {
-  randomIndex = Math.floor(Math.random() * 20);
-  explanation = words[randomIndex][1];
-  randomWord = words[randomIndex][0];
-  if (!isFirstExecution) {
-    foundLetterArray = [];
-    addHintToGame(true);
-    addMaskedWords(true);
-    checkIfLetterCoincides();
-  } else {
-    addLetterButtons();
-    showLetterButtons();
-    addHintToGame();
-    addMaskedWords();
-    checkIfLetterCoincides();
-  }
+  addMaskedWords();
+  showLetterButtons();
 }
 
-function checkCompleteWord() {
-  if (foundLetterArray.length == randomWord.length) {
-    successCounter++;
-    let points = document.getElementById("points");
-    points.innerHTML = successCounter;
-    return true;
-  } else {
-    return false;
-  }
-}
 
-function actUpponCoincidence(amountOfCoincidences) {
-  if (coincidence != null) {
-    for (let i = 0; i < amountOfCoincidences; i++) {
-      foundLetterArray.push(coincidence);
-   }
-    updateBlanksForFoundLetter();
-    let success = checkCompleteWord();
-    if (success) {
-      executeGameFunctionality(false);
-    }
-  }
-}
 
 function updateBlanksForFoundLetter() {
   wordArea = document.getElementById("wordArea");
@@ -127,23 +93,12 @@ function addHintToGame(update) {
   points.innerHTML = successCounter;
 }
 
-function checkIfLetterCoincides() {
-  let buttons = document.querySelectorAll("button");
-  buttons.forEach((button) => {
-    button.addEventListener("click", (event) => {
-      let clickedButton = event.target;
-      let buttonLetter = clickedButton.getAttribute("data-letter");
-      let wordChars = randomWord.toLowerCase().split("");
-      if (wordChars.includes(buttonLetter)) {
-        wordChars.filter(x => x === buttonLetter).length;
-        coincidence = buttonLetter;
-        let amountOftimes = wordChars.filter(x => x === buttonLetter).length;
-        actUpponCoincidence(amountOftimes);
-      } else {
-        coincidence = null;
-      }
-    });
-  });
+function handleClick(letter) {
+  return function() {
+      console.log("Button clicked with variable:", variable);
+      // Check if coincidence
+      if()
+  };
 }
 
 function addMaskedWords(update) {
@@ -161,18 +116,21 @@ function addMaskedWords(update) {
 }
 }
 
-function addLetterButtons() {
-  alphabetArray.forEach((element) => {
+function createLetterButtons() {
+  alphabetArray.forEach((letter) => {
     let clickableLetterButton = document.createElement("button");
-    clickableLetterButton.innerHTML = element;
-    clickableLetterButton.dataset.letter = element;
+    clickableLetterButton.innerHTML = letter;
+    clickableLetterButton.dataset.letter = letter;
     clickableLetterButton.dataset.available = true;
     clickableLetterButton.className = "button";
+    clickableLetterButton.addEventListener("click", handleClick(letter))
     clickableLetterArray.push(clickableLetterButton);
   });
 }
 
 function showLetterButtons() {
+
+  createLetterButtons();
   clickableLetterArray.forEach((element) => {
     document.body.appendChild(element);
   });
