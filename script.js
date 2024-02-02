@@ -1,24 +1,24 @@
 let words = [
-  ["Apple", "Fruit used for cider making", "apple.jpg"],
-  ["Banana", "Fruit that has a variety named 'Cavendish'", "banana.jpg"],
-  ["Chair", "Furniture", "chair.jpg"],
-  ["Dog", "Pet", "dog.jpg"],
-  ["Elephant", "Animal with a trunk", "elephant.jpg"],
-  ["Flower", "Associated with plants reproducing", "flower.jpg"],
-  ["Grape", "Fruit used to make wine", "grape.jpg"],
-  ["Horse", "Animal", "horse.jpg"],
-  ["Igloo", "Shelter", "igloo.jpg"],
-  ["Jacket", "Clothing", "jacket.jpg"],
-  ["Kangaroo", "Marsupilanian", "kangaroo.jpg"],
-  ["Lion", "Animal you see in a safari reserve", "lion.jpg"],
-  ["Monkey", "Primate", "monkey.jpg"],
-  ["Nose", "Part of the body", "nose.jpg"],
-  ["Orange", "Citrus", "orange.jpg"],
-  ["Penguin", "Bird", "penguin.jpg"],
-  ["Quilt", "Cover", "quilt.jpg"],
-  ["Rabbit", "Rodent", "rabbit.jpg"],
-  ["Sun", "Planet", "sun.jpg"],
-  ["Tree", "Produces oxygen during the day", "tree.jpg"],
+  ["apple", "Fruit used for cider making", "apple.jpg"],
+  ["banana", "Fruit that has a variety named 'Cavendish'", "banana.jpg"],
+  ["chair", "Furniture", "chair.jpg"],
+  ["dog", "Pet", "dog.jpg"],
+  ["elephant", "Animal with a trunk", "elephant.jpg"],
+  ["flower", "Associated with plants reproducing", "flower.jpg"],
+  ["grape", "Fruit used to make wine", "grape.jpg"],
+  ["horse", "Animal", "horse.jpg"],
+  ["igloo", "Shelter", "igloo.jpg"],
+  ["jacket", "Clothing", "jacket.jpg"],
+  ["kangaroo", "Marsupilanian", "kangaroo.jpg"],
+  ["lion", "Animal you see in a safari reserve", "lion.jpg"],
+  ["monkey", "Primate", "monkey.jpg"],
+  ["nose", "Part of the body", "nose.jpg"],
+  ["orange", "Citrus", "orange.jpg"],
+  ["penguin", "Bird", "penguin.jpg"],
+  ["quilt", "Cover", "quilt.jpg"],
+  ["rabbit", "Rodent", "rabbit.jpg"],
+  ["sun", "Planet", "sun.jpg"],
+  ["tree", "Produces oxygen during the day", "tree.jpg"],
 ];
 let coincidence = null;
 let foundLetterArray = [];
@@ -55,10 +55,9 @@ function startGame() {
 }
 
 function handleClick(event) {
-let buttonClicked = event.target;
-let letter = buttonClicked.dataset.letter;
+let letter = event.dataset.letter;
       // Check if coincidence
-      let wordChar = randomWord.split();
+      let wordChar = randomWord.split("git ");
       for (let i = 0; i < wordChar.length; i++) {
        
         if(wordChar[i]== letter){
@@ -131,8 +130,7 @@ function createLetterButtons() {
   alphabetArray.forEach((letter) => {
     let clickableLetterButton = document.createElement("button");
     clickableLetterButton.innerHTML = letter;
-    clickableLetterButton.datas
-    et.letter = letter;
+    clickableLetterButton.dataset.letter = letter;
     clickableLetterButton.dataset.available = true;
     clickableLetterButton.className = "button";
     
