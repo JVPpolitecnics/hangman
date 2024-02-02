@@ -42,18 +42,35 @@ function checkName() {
 
 function startGame() {
   randomIndex = Math.floor(Math.random() * 20);
-  randomWord[randomIndex][0];
-  explanation[randomIndex][1];
+  randomWord = words[randomIndex][0];
+  explanation = words[randomIndex][1];
   foundLetterArray = [];
   let initialMessageBox = document.getElementById("initialMessageBox");
   if (initialMessageBox != null) {
     initialMessageBox.remove();
   }
   addMaskedWords();
-  showLetterButtons();
+  createLetterButtons();
+  addHintToGame();
 }
 
+function handleClick(event) {
+let buttonClicked = event.target;
+let letter = buttonClicked.dataset.letter;
+      // Check if coincidence
+      let wordChar = randomWord.split();
+      for (let i = 0; i < wordChar.length; i++) {
+       
+        if(wordChar[i]== letter){
+            foundLetterArray.push(letter);
+            updateBlanksForFoundLetter()
+            addHintToGame(update);
+        }
 
+    
+
+  };
+}
 
 function updateBlanksForFoundLetter() {
   wordArea = document.getElementById("wordArea");
@@ -93,13 +110,7 @@ function addHintToGame(update) {
   points.innerHTML = successCounter;
 }
 
-function handleClick(letter) {
-  return function() {
-      console.log("Button clicked with variable:", variable);
-      // Check if coincidence
-      if()
-  };
-}
+
 
 function addMaskedWords(update) {
   let underscores = "__ ".repeat(randomWord.length);
@@ -120,18 +131,16 @@ function createLetterButtons() {
   alphabetArray.forEach((letter) => {
     let clickableLetterButton = document.createElement("button");
     clickableLetterButton.innerHTML = letter;
-    clickableLetterButton.dataset.letter = letter;
+    clickableLetterButton.datas
+    et.letter = letter;
     clickableLetterButton.dataset.available = true;
     clickableLetterButton.className = "button";
-    clickableLetterButton.addEventListener("click", handleClick(letter))
-    clickableLetterArray.push(clickableLetterButton);
+    
+    clickableLetterButton.addEventListener("click", function() {
+      handleClick(clickableLetterButton);
+    });
+
+    document.body.appendChild(clickableLetterButton);
   });
 }
 
-function showLetterButtons() {
-
-  createLetterButtons();
-  clickableLetterArray.forEach((element) => {
-    document.body.appendChild(element);
-  });
-}
