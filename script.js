@@ -31,7 +31,7 @@ let randomIndex;
 let mistake = parseInt(localStorage.getItem('mistake')) || 1;
 let points = parseInt(localStorage.getItem('points')) || 0;
 
-updateImgHangMan(mistake);
+
 
 function checkName() {
   let username = document.getElementById("name").value;
@@ -56,6 +56,7 @@ function startGame(update) {
   addMaskedWords(update);
   createLetterButtons(update);
   addHintToGame(update);
+  updateImgHangMan(mistake);
 }
 
 //function in which most of the game functionality is handled
@@ -116,22 +117,22 @@ function updateBlanksForFoundLetter() {
 
 function addHintToGame(update) {
   let hint;
-  let points;
+  let pointBox;
   if (!update) {
     hint = document.createElement("h1");
     hint.id = "hint";
     hint.className = "gameArea";
-    points = document.createElement("h1");
-    points.id = "points";
-    document.body.appendChild(points);
+    pointBox = document.createElement("h1");
+    pointBox.id = "points";
+    document.body.appendChild(pointBox);
     document.body.appendChild(hint);
   } else {
     hint = document.getElementById("hint");
-    points = document.getElementById("points");
+    pointBox = document.getElementById("points");
   }
 
   hint.innerHTML = explanation;
-  points.innerHTML = successCounter;
+  pointBox.innerHTML = points;
 }
 
 function addMaskedWords(update) {
