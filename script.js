@@ -20,7 +20,7 @@ let words = [
   ["sun", "Planet", "sun.jpg"],
   ["tree", "Produces oxygen during the day", "tree.jpg"],
 ];
-let coincidenceCounter = 0;
+let coincidenceCounter;
 let foundLetterArray = [];
 let randomWord = null;
 let successCounter = 0;
@@ -28,7 +28,10 @@ let explanation;
 let clickableLetterArray = [];
 let alphabetArray = "abcdefghijklmnopqrstuvwxyz".split("");
 let randomIndex;
-let mistake = 1;
+let mistake = parseInt(localStorage.getItem('mistake')) || 1;
+let points = parseInt(localStorage.getItem('points')) || 0;
+
+updateImgHangMan(mistake);
 
 function checkName() {
   let username = document.getElementById("name").value;
@@ -41,6 +44,7 @@ function checkName() {
 }
 // initiates game elements if first go, else it recovers them and changes them to suit new word.
 function startGame(update) {
+  coincidenceCounter  = 0;
   randomIndex = Math.floor(Math.random() * 20);
   randomWord = words[randomIndex][0];
   explanation = words[randomIndex][1];
@@ -59,7 +63,6 @@ function handleClick(event) {
   let letter = event.dataset.letter;
   // Check if coincidence
   let wordChar = randomWord.split("");
-  let previousCoincidence;
   for (let i = 0; i < wordChar.length; i++) {
     if (wordChar[i] == letter && wordChar[i] != ".") {
       foundLetterArray.push(letter);
@@ -67,23 +70,29 @@ function handleClick(event) {
       coincidenceCounter++;
       console.log("acierto");
       console.log("aciertos:" + coincidenceCounter);
-    
-  
+      
     } 
   }
   if(!wordChar.includes(letter)){
     mistake++;
-    console.log("mistake: "+ mistake)
+    console.log("mistake: "+ mistake);
+    updateImgHangMan(mistake);
   }
   checkIfWordIsGuessed(coincidenceCounter, randomWord);
 }
+function updatePointsPanel(){
+  let point = document.getElementById("points");
+  point.innerHTML = points;
+}
 function updateImgHangMan(mistake) {
   let hangmanImg = document.getElementById("hangmanImg");
-  hangmanImg.src = "img/hangman1" + mistake + ".png";
+  hangmanImg.src = "img/hangman" + mistake + ".png";
 }
 function checkIfWordIsGuessed(coincidences, wordCharArray) {
   if (wordCharArray.length == coincidences) {
     startGame(true);
+    points++;
+    updatePointsPanel();
   }
 }
 
@@ -152,8 +161,16 @@ function createLetterButtons(update) {
       clickableLetterButton.addEventListener("click", function () {
         handleClick(clickableLetterButton);
       });
-
-      document.body.appendChild(clickableLetterButton);
+let area = document.getElementById("buttonArea");
+      area.appendChild(clickableLetterButton);
     });
   }
 }
+
+window.addEventListener('beforeunload', function() {
+  // Save data to localStorage
+  localStorage.setItem('points', points);
+  localStorage.setItem('mistake', mistake);
+  localStorage.setItem('name', mistake);
+  localStorage.setItem('wordIndex', randomIndex);
+});
