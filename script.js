@@ -20,7 +20,7 @@ let words = [
   ["sun", "Planet", "sun.jpg"],
   ["tree", "Produces oxygen during the day", "tree.jpg"],
 ];
-let coincidence = null;
+let coincidenceCounter = 0;
 let foundLetterArray = [];
 let randomWord = null;
 let successCounter = 0;
@@ -28,7 +28,7 @@ let explanation;
 let clickableLetterArray = [];
 let alphabetArray = "abcdefghijklmnopqrstuvwxyz".split("");
 let randomIndex;
-
+let mistake = 1;
 
 function checkName() {
   let username = document.getElementById("name").value;
@@ -36,11 +36,11 @@ function checkName() {
   if (username == "") {
     alert("Please fill in your name");
   } else {
-    startGame();
+    startGame(false);
   }
 }
-
-function startGame() {
+// initiates game elements if first go, else it recovers them and changes them to suit new word.
+function startGame(update) {
   randomIndex = Math.floor(Math.random() * 20);
   randomWord = words[randomIndex][0];
   explanation = words[randomIndex][1];
@@ -49,26 +49,42 @@ function startGame() {
   if (initialMessageBox != null) {
     initialMessageBox.remove();
   }
-  addMaskedWords();
-  createLetterButtons();
-  addHintToGame();
+  addMaskedWords(update);
+  createLetterButtons(update);
+  addHintToGame(update);
 }
 
+//function in which most of the game functionality is handled
 function handleClick(event) {
-let letter = event.dataset.letter;
-      // Check if coincidence
-      let wordChar = randomWord.split("git ");
-      for (let i = 0; i < wordChar.length; i++) {
-       
-        if(wordChar[i]== letter){
-            foundLetterArray.push(letter);
-            updateBlanksForFoundLetter()
-            addHintToGame(update);
-        }
-
+  let letter = event.dataset.letter;
+  // Check if coincidence
+  let wordChar = randomWord.split("");
+  let previousCoincidence;
+  for (let i = 0; i < wordChar.length; i++) {
+    if (wordChar[i] == letter && wordChar[i] != ".") {
+      foundLetterArray.push(letter);
+      updateBlanksForFoundLetter();
+      coincidenceCounter++;
+      console.log("acierto");
+      console.log("aciertos:" + coincidenceCounter);
     
-
-  };
+  
+    } 
+  }
+  if(!wordChar.includes(letter)){
+    mistake++;
+    console.log("mistake: "+ mistake)
+  }
+  checkIfWordIsGuessed(coincidenceCounter, randomWord);
+}
+function updateImgHangMan(mistake) {
+  let hangmanImg = document.getElementById("hangmanImg");
+  hangmanImg.src = "img/hangman1" + mistake + ".png";
+}
+function checkIfWordIsGuessed(coincidences, wordCharArray) {
+  if (wordCharArray.length == coincidences) {
+    startGame(true);
+  }
 }
 
 function updateBlanksForFoundLetter() {
@@ -102,43 +118,42 @@ function addHintToGame(update) {
     document.body.appendChild(hint);
   } else {
     hint = document.getElementById("hint");
-    points = document.getElementById("points")
+    points = document.getElementById("points");
   }
 
   hint.innerHTML = explanation;
   points.innerHTML = successCounter;
 }
 
-
-
 function addMaskedWords(update) {
   let underscores = "__ ".repeat(randomWord.length);
   let underscoresArea;
-  if (!update){
-  underscoresArea = document.createElement("h1");
-  underscoresArea.id = "wordArea";
-  underscoresArea.innerHTML = underscores;
-  underscoresArea.className = "gameArea";
-  document.body.appendChild(underscoresArea);
-} else {
-  underscoresArea = document.getElementById("wordArea");
-  underscoresArea.innerHTML = underscores;
-}
+  if (!update) {
+    underscoresArea = document.createElement("h1");
+    underscoresArea.id = "wordArea";
+    underscoresArea.innerHTML = underscores;
+    underscoresArea.className = "gameArea";
+    document.body.appendChild(underscoresArea);
+  } else {
+    underscoresArea = document.getElementById("wordArea");
+    underscoresArea.innerHTML = underscores;
+  }
 }
 
-function createLetterButtons() {
-  alphabetArray.forEach((letter) => {
-    let clickableLetterButton = document.createElement("button");
-    clickableLetterButton.innerHTML = letter;
-    clickableLetterButton.dataset.letter = letter;
-    clickableLetterButton.dataset.available = true;
-    clickableLetterButton.className = "button";
-    
-    clickableLetterButton.addEventListener("click", function() {
-      handleClick(clickableLetterButton);
+function createLetterButtons(update) {
+  if (!update) {
+    alphabetArray.forEach((letter) => {
+      let clickableLetterButton = document.createElement("button");
+      clickableLetterButton.innerHTML = letter;
+      clickableLetterButton.dataset.letter = letter;
+      clickableLetterButton.dataset.available = true;
+      clickableLetterButton.className = "button";
+
+      clickableLetterButton.addEventListener("click", function () {
+        handleClick(clickableLetterButton);
+      });
+
+      document.body.appendChild(clickableLetterButton);
     });
-
-    document.body.appendChild(clickableLetterButton);
-  });
+  }
 }
-
