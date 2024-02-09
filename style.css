@@ -19,10 +19,7 @@ body {
 box-shadow: 0px -7px 41px 57px rgba(163,63,163,1);
 }
 
-.gameArea{
-  margin-left: 45%;
-  margin-top: 15%;
-}
+
 
 .button {
     position: relative;
@@ -36,6 +33,7 @@ box-shadow: 0px -7px 41px 57px rgba(163,63,163,1);
     border: none;
     cursor: pointer;
    margin-left: 4px;
+   margin-top: 4px;
   }
   
   .button:hover::before {
@@ -67,23 +65,55 @@ box-shadow: 0px -7px 41px 57px rgba(163,63,163,1);
   
   #hangman{
     position: absolute;
-    top: 100px;
-    left: 50px;
+    top: 150px;
+    left: 1450px;
   }
 
   #wordArea{
-    position: relative;
+    position: absolute;
+    top: 40%;
+    left: 40%;
     height: 100px;
     width: 600px;
 
   }
-
+#logout{
+  position: absolute;
+  top: 40px;
+  left: 1500px;
+}
   
   #buttonArea{
+    background-color: grey;
     position: relative;
-    height: 100px;
-    width: 700px;
+    height: 110px;
+    width: 980px;
+    text-align: center;
     align-items: center;
     top: 500px;
-    left: 650px;
+    left: 500px;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 0 17px 10px #555;
+    border-radius: 1%;
+  }
+
+  #imgBoxContainer{
+    height: 500px;
+    width: 500px;
+  }
+  #imgBox{
+    max-width: 100%; height: auto; 
+    border-radius: 30%;
+  }
+
+  #points{
+   position: absolute;
+   top: 5%;
+   left: 42%;
+  }
+  #hint{
+    position: absolute;
+    top: 10%;
+    left: 42%;
+
   }
