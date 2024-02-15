@@ -45,7 +45,7 @@ function checkName() {
 // initiates game elements if first go, else it recovers them and changes them to suit new word.
 function startGame(update) {
   coincidenceCounter  = 0;
-  randomIndex = Math.floor(Math.random() * 20);
+  randomIndex = parseInt(localStorage.getItem('wordIndex')) || Math.floor(Math.random() * 20);
   randomWord = words[randomIndex][0];
   explanation = words[randomIndex][1];
   imgPath =  words[randomIndex][2];
@@ -74,8 +74,11 @@ function addLogOutButton(){
 }
 
 function logOut(){
-  localStorage.clear();
-  window.location.reload();
+  alert("renueva");
+ localStorage.removeItem("points");
+ localStorage.removeItem("wordIndex");
+ localStorage.removeItem("mistake");
+  window.location.reload(true);
 }
 
 //function in which most of the game functionality is handled
@@ -94,6 +97,12 @@ function handleClick(event) {
     } 
   }
   if(!wordChar.includes(letter)){
+    if(mistake >= 9){
+      alert("you loose");
+      let loseMessage = document.getElementById("loseMessageBox");
+      loseMessage.style.display = 'block'; 
+
+    }
     mistake++;
     console.log("mistake: "+ mistake);
     updateImgHangMan(mistake);

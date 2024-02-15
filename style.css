@@ -19,7 +19,13 @@ body {
 box-shadow: 0px -7px 41px 57px rgba(163,63,163,1);
 }
 
+.hidden>div {
+	display:none;
+}
 
+.visible>div {
+	display:block;
+}
 
 .button {
     position: relative;
@@ -66,7 +72,7 @@ box-shadow: 0px -7px 41px 57px rgba(163,63,163,1);
   #hangman{
     position: absolute;
     top: 150px;
-    left: 1450px;
+    left: 900px;
   }
 
   #wordArea{
@@ -116,4 +122,13 @@ box-shadow: 0px -7px 41px 57px rgba(163,63,163,1);
     top: 10%;
     left: 42%;
 
+  }
+
+  #loseMessageBox{
+    position: absolute;
+    top: 10%;
+    left: 35%;
+    z-index: 2;
+    align-items: center;
+    text-align: center;
   }
