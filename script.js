@@ -21,7 +21,8 @@ let words = [
   ["tree", "Produces oxygen during the day", "tree.png"],
 ];
 let coincidenceCounter;
-let foundLetterArray = [];
+let foundLetterArray = parseInt(localStorage.getItem('foundLetterList')) || [];
+let clickedArray = parseInt(localStorage.getItem('clickedLetter'))|| [];
 let randomWord = null;
 let successCounter = 0;
 let explanation;
@@ -30,11 +31,11 @@ let alphabetArray = "abcdefghijklmnopqrstuvwxyz".split("");
 let randomIndex;
 let mistake = parseInt(localStorage.getItem('mistake')) || 1;
 let points = parseInt(localStorage.getItem('points')) || 0;
-
+let username;
 
 
 function checkName() {
-  let username = document.getElementById("name").value || localStorage.getItem('name');
+   username = document.getElementById("name").value || localStorage.getItem('name');
 
   if (username == "") {
     alert("Please fill in your name");
@@ -45,7 +46,11 @@ function checkName() {
 // initiates game elements if first go, else it recovers them and changes them to suit new word.
 function startGame(update) {
   coincidenceCounter  = 0;
+  if (!update){
   randomIndex = parseInt(localStorage.getItem('wordIndex')) || Math.floor(Math.random() * 20);
+} else {
+  randomIndex = Math.floor(Math.random() * 20);
+}
   randomWord = words[randomIndex][0];
   explanation = words[randomIndex][1];
   imgPath =  words[randomIndex][2];
@@ -94,7 +99,10 @@ function handleClick(event) {
       console.log("acierto");
       console.log("aciertos:" + coincidenceCounter);
       
+    } else {
+      clickedArray.push(letter);
     } 
+    
   }
   if(!wordChar.includes(letter)){
     if(mistake >= 9){
@@ -108,7 +116,10 @@ function handleClick(event) {
     updateImgHangMan(mistake);
   }
   checkIfWordIsGuessed(coincidenceCounter, randomWord);
+  makeUnclickable();
+  saveData();
 }
+
 function updatePointsPanel(){
   let point = document.getElementById("points");
   point.innerHTML = "points: " + points;
@@ -193,21 +204,38 @@ function createLetterButtons(update) {
       clickableLetterButton.innerHTML = letter;
       clickableLetterButton.dataset.letter = letter;
       clickableLetterButton.dataset.available = true;
-      clickableLetterButton.className = "button";
+      clickableLetterButton.className = "button letters";
 
       clickableLetterButton.addEventListener("click", function () {
+        
         handleClick(clickableLetterButton);
+        
       });
-let area = document.getElementById("buttonArea");
+    let area = document.getElementById("buttonArea");
       area.appendChild(clickableLetterButton);
+     
     });
   }
 }
-
-window.addEventListener('beforeunload', function() {
+function makeUnclickable(){
+  const elements = document.querySelectorAll('.letters');
+elements.forEach(element => {
+  if (clickedArray.includes(element.dataset.letter)){
+    element.style.color = 'red';
+    element.dataset
+  }
+ if (foundLetterArray.includes(element.dataset.letter)){
+  element.style.color = 'green';
+ }
+});
+}
+ function saveData(){
   // Save data to localStorage
   localStorage.setItem('points', points);
   localStorage.setItem('mistake', mistake);
   localStorage.setItem('wordIndex', randomIndex);
+  localStorage.setItem('foundLetterList', foundLetterArray);
+  localStorage.setItem('clickedLetter', clickedArray);
   localStorage.setItem('name', username);
-});
+  
+};
