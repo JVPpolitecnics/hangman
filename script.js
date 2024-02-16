@@ -222,7 +222,6 @@ function makeUnclickable(){
 elements.forEach(element => {
   if (clickedArray.includes(element.dataset.letter)){
     element.style.color = 'red';
-    element.dataset
   }
  if (foundLetterArray.includes(element.dataset.letter)){
   element.style.color = 'green';
