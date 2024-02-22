@@ -116,9 +116,10 @@ function handleClick(event) {
     console.log("mistake: "+ mistake);
     updateImgHangMan(mistake);
   }
+  
   checkIfWordIsGuessed(coincidenceCounter, randomWord);
-  makeUnclickable();
   saveData();
+  changeColors(); 
 }
 
 function updatePointsPanel(){
@@ -131,8 +132,9 @@ function updateImgHangMan(mistake) {
 }
 function checkIfWordIsGuessed(coincidences, wordCharArray) {
   if (wordCharArray.length == coincidences) {
-    localStorage.removeItem("foundLetterList");
-    localStorage.removeItem("clickedLetter");
+    clickedArray = [];
+    foundLetterArray = [];
+    changeColors();
     startGame(true);
     points++;
     updatePointsPanel();
@@ -202,6 +204,8 @@ function addMaskedWords(update) {
 
 function createLetterButtons(update) {
   if (!update) {
+
+  
     alphabetArray.forEach((letter) => {
       let clickableLetterButton = document.createElement("button");
       clickableLetterButton.innerHTML = letter;
@@ -226,11 +230,13 @@ function createLetterButtons(update) {
     });
   }
 }
-function makeUnclickable(){
+function changeColors(){
   const elements = document.querySelectorAll('.letters');
 elements.forEach(element => {
   if (clickedArray.includes(element.dataset.letter)){
     element.style.color = 'red';
+  } else{
+    element.style.color = 'white';
   }
  if (foundLetterArray.includes(element.dataset.letter)){
   element.style.color = 'green';
