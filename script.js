@@ -21,8 +21,8 @@ let words = [
   ["tree", "Produces oxygen during the day", "tree.png"],
 ];
 let coincidenceCounter;
-let foundLetterArray = parseInt(localStorage.getItem('foundLetterList')) || [];
-let clickedArray = parseInt(localStorage.getItem('clickedLetter'))|| [];
+let foundLetterArray = JSON.parse(localStorage.getItem('foundLetterList')) || [];
+let clickedArray = JSON.parse(localStorage.getItem('clickedLetter'))|| [];
 let randomWord = null;
 let successCounter = 0;
 let explanation;
@@ -45,6 +45,7 @@ function checkName() {
 }
 // initiates game elements if first go, else it recovers them and changes them to suit new word.
 function startGame(update) {
+  //console.log("clicked:" + clickedArray.toString());
   coincidenceCounter  = 0;
   if (!update){
   randomIndex = parseInt(localStorage.getItem('wordIndex')) || Math.floor(Math.random() * 20);
@@ -75,14 +76,14 @@ function addLogOutButton(){
     logOut();
   });
   document.body.appendChild(button);
-
 }
 
 function logOut(){
-  alert("renueva");
  localStorage.removeItem("points");
  localStorage.removeItem("wordIndex");
  localStorage.removeItem("mistake");
+ localStorage.removeItem("foundLetterList");
+ localStorage.removeItem("clickedLetter");
   window.location.reload(true);
 }
 
@@ -130,6 +131,8 @@ function updateImgHangMan(mistake) {
 }
 function checkIfWordIsGuessed(coincidences, wordCharArray) {
   if (wordCharArray.length == coincidences) {
+    localStorage.removeItem("foundLetterList");
+    localStorage.removeItem("clickedLetter");
     startGame(true);
     points++;
     updatePointsPanel();
@@ -205,6 +208,12 @@ function createLetterButtons(update) {
       clickableLetterButton.dataset.letter = letter;
       clickableLetterButton.dataset.available = true;
       clickableLetterButton.className = "button letters";
+      if(clickedArray.includes(letter)){
+        clickableLetterButton.style.color = "red";
+      }
+      if(foundLetterArray.includes(letter)){
+        clickableLetterButton.style.color = "green"
+      }
 
       clickableLetterButton.addEventListener("click", function () {
         
@@ -233,8 +242,8 @@ elements.forEach(element => {
   localStorage.setItem('points', points);
   localStorage.setItem('mistake', mistake);
   localStorage.setItem('wordIndex', randomIndex);
-  localStorage.setItem('foundLetterList', foundLetterArray);
-  localStorage.setItem('clickedLetter', clickedArray);
+  localStorage.setItem('foundLetterList',JSON.stringify(foundLetterArray));
+  localStorage.setItem('clickedLetter', JSON.stringify(clickedArray));
   localStorage.setItem('name', username);
   
 };
